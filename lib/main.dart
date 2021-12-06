@@ -12,8 +12,9 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(title: Text('V vs H scroll')),
+        appBar: AppBar(title: Text('Vertical fullscreen')),
         body: PageView(
+          scrollDirection: Axis.vertical,
           children: [
             ContentPage(
                 URL:
