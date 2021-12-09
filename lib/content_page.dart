@@ -5,9 +5,17 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class ContentPage extends StatelessWidget {
-  const ContentPage({Key? key, required this.URL}) : super(key: key);
+  const ContentPage(
+      {Key? key,
+      required this.newsSource,
+      required this.newsImage,
+      required this.newsTitle,
+      required this.newsDate,
+      required this.newsBody})
+      : super(key: key);
 
-  final String URL;
+  final Map newsSource;
+  final String newsImage, newsTitle, newsDate, newsBody;
 
   @override
   Widget build(BuildContext context) {
@@ -18,26 +26,19 @@ class ContentPage extends StatelessWidget {
         child: Column(
           children: [
             NewsSource(
-                imageURL:
-                    'https://www.tecmundo.com.br/mobile/icon_64x64.5fe08bef7e81e4e45eddfe09ebe53b6d.png',
-                name: 'Tecmundo'),
+                imageURL: newsSource['icon'] ?? '', name: newsSource['name']),
+            SizedBox(
+              height: 10,
+            ),
+            NewsImage(imageURL: newsImage),
             SizedBox(
               height: 20,
             ),
-            NewsImage(
-                imageURL:
-                    'https://tm.ibxk.com.br/2021/12/03/03171613471441.jpg?ims=352x208'),
-            SizedBox(
-              height: 20,
-            ),
-            NewsTitle(
-                title: 'Você sabe o que é mecânica quântica?',
-                date: 'Segunda-feira, 16/12/2021'),
+            NewsTitle(title: newsTitle, date: newsDate),
             SizedBox(
               height: 30,
             ),
-            NewsBody(
-                "Se você não esteve isolado do mundo e da internet nos últimos anos, você deve ter ouvido alguma coisa ou algum termo ligado com a palavra “quântico”. Seja entre os famigerados coachs ou entre “tratamentos”, “curas” e “medicinas”, a apropriação do termo que faz referência à Mecânica Quântica é bastante disseminada e chegou até mesmo na alimentação com a “nutrição quântica” e o, acredite, “sal quântico”.")
+            NewsBody(newsBody)
           ],
         ),
       ),
@@ -56,7 +57,7 @@ class NewsSource extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Container(width: 35, child: Image(image: NetworkImage(imageURL))),
+        Container(width: 30, child: Image(image: NetworkImage(imageURL))),
         SizedBox(
           width: 15,
         ),
