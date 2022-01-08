@@ -28,9 +28,8 @@ class HomePage extends StatelessWidget {
                         NewsSummary newsSummary = newsSummaries[count];
                         return ContentPage(
                           newsSource: {
-                            'icon':
-                                'https://www.tecmundo.com.br/mobile/icon_64x64.5fe08bef7e81e4e45eddfe09ebe53b6d.png',
-                            'name': 'Tecmundo',
+                            'icon': newsSummary.newsPage.iconURL,
+                            'name': newsSummary.newsPage.name,
                           },
                           newsImage: newsSummary.mainImageURL,
                           newsTitle: newsSummary.title,

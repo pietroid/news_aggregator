@@ -11,6 +11,7 @@ NewsSummary _$NewsSummaryFromJson(Map<String, dynamic> json) => NewsSummary(
       mainText: json['mainText'] as String,
       mainImageURL: json['mainImageURL'] as String,
       newsSourceURL: json['newsSourceURL'] as String,
+      newsPage: NewsSource.fromJson(json['newsPage'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$NewsSummaryToJson(NewsSummary instance) =>
@@ -19,4 +20,5 @@ Map<String, dynamic> _$NewsSummaryToJson(NewsSummary instance) =>
       'mainText': instance.mainText,
       'mainImageURL': instance.mainImageURL,
       'newsSourceURL': instance.newsSourceURL,
+      'newsPage': instance.newsPage,
     };
