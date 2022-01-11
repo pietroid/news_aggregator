@@ -1,11 +1,36 @@
+import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:news_aggregator_flutter/bloc/news_summaries_cubit.dart';
 import 'package:news_aggregator_flutter/content_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:news_aggregator_flutter/repository/news_summaries_service.dart';
 import 'package:news_aggregator_flutter/repository/news_summary.dart';
 
 void main() {
-  runApp(const HomePage());
+  runApp(ModularApp(module: AppModule(), child: AppWidget()));
+}
+
+class AppModule extends Module {
+  @override
+  List<Bind> get binds => [
+        Bind.singleton((i) => NewsSummariesService()),
+        Bind.singleton((i) => NewsSummariesCubit()),
+      ];
+
+  @override
+  List<ModularRoute> get routes =>
+      [ChildRoute('/', child: (context, args) => HomePage())];
+}
+
+class AppWidget extends StatelessWidget {
+  const AppWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp().modular();
+  }
 }
 
 class HomePage extends StatelessWidget {
@@ -13,35 +38,32 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    NewsSummariesService nss = NewsSummariesService();
-    return MaterialApp(
-      home: Scaffold(
-        body: SafeArea(
-          child: FutureBuilder(
-              future: nss.getNewsSummaries(),
-              builder: (context, AsyncSnapshot<List<NewsSummary>> snapshot) {
-                if (snapshot.hasData) {
-                  List<NewsSummary> newsSummaries = snapshot.data!;
-                  return PageView.builder(
-                      scrollDirection: Axis.vertical,
-                      itemBuilder: (context, count) {
-                        NewsSummary newsSummary = newsSummaries[count];
-                        return ContentPage(
-                          newsSource: {
-                            'icon': newsSummary.newsPage.iconURL,
-                            'name': newsSummary.newsPage.name,
-                          },
-                          newsImage: newsSummary.mainImageURL,
-                          newsTitle: newsSummary.title,
-                          newsDate: '',
-                          newsBody: newsSummary.mainText,
-                        );
-                      });
-                } else {
-                  return Center(child: CircularProgressIndicator());
-                }
-              }),
-        ),
+    Modular.get<NewsSummariesCubit>().fetchAll();
+    return Scaffold(
+      body: SafeArea(
+        child: BlocBuilder<NewsSummariesCubit, List<NewsSummary>>(
+            bloc: Modular.get<NewsSummariesCubit>(),
+            builder: (context, list) {
+              if (list.length == 0) {
+                return Center(child: CircularProgressIndicator());
+              }
+
+              return PageView.builder(
+                  scrollDirection: Axis.vertical,
+                  itemBuilder: (context, count) {
+                    NewsSummary newsSummary = list[count];
+                    return ContentPage(
+                      newsSource: {
+                        'icon': newsSummary.newsPage.iconURL,
+                        'name': newsSummary.newsPage.name,
+                      },
+                      newsImage: newsSummary.mainImageURL,
+                      newsTitle: newsSummary.title,
+                      newsDate: '',
+                      newsBody: newsSummary.mainText,
+                    );
+                  });
+            }),
       ),
     );
   }
