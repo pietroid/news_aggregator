@@ -41,17 +41,24 @@ class HomePage extends StatelessWidget {
     Modular.get<NewsSummariesCubit>().fetchAll();
     return Scaffold(
       body: SafeArea(
-        child: BlocBuilder<NewsSummariesCubit, List<NewsSummary>>(
+        child: BlocBuilder<NewsSummariesCubit, NewsSummariesState>(
             bloc: Modular.get<NewsSummariesCubit>(),
-            builder: (context, list) {
-              if (list.length == 0) {
+            builder: (context, state) {
+              if (state.status == NewsSummariesStatus.loading) {
                 return Center(child: CircularProgressIndicator());
+              }
+
+              if (state.status == NewsSummariesStatus.error) {
+                return Center(
+                  child: Text('Erro'),
+                );
               }
 
               return PageView.builder(
                   scrollDirection: Axis.vertical,
+                  itemCount: state.content.length,
                   itemBuilder: (context, count) {
-                    NewsSummary newsSummary = list[count];
+                    NewsSummary newsSummary = state.content[count];
                     return ContentPage(
                       newsSource: {
                         'icon': newsSummary.newsPage.iconURL,
