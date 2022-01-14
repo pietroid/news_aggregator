@@ -57,6 +57,8 @@ class HomePage extends StatelessWidget {
               return PageView.builder(
                   scrollDirection: Axis.vertical,
                   itemCount: state.content.length,
+                  onPageChanged: (index) =>
+                      Modular.get<NewsSummariesCubit>().setIndex(index),
                   itemBuilder: (context, count) {
                     NewsSummary newsSummary = state.content[count];
                     return ContentPage(
