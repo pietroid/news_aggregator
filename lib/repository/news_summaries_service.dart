@@ -6,8 +6,8 @@ class NewsSummariesService {
   final client = http.Client();
 
   Future<List<NewsSummary>> getNewsSummaries() async {
-    final response = await client.get(
-        Uri.parse('http://192.168.15.36:3000/news/summaries?news_number=10'));
+    final response = await client.get(Uri.parse(
+        'https://9187-2804-431-cff4-3b30-bd51-a73-eb92-7636.ngrok.io/news/summaries?news_number=10'));
     final decodedJson = jsonDecode(response.body);
     final newsSummariesJson = decodedJson['newsSummaries'].toList();
     return newsSummariesJson
@@ -18,6 +18,6 @@ class NewsSummariesService {
 
   Future<void> readNewsSummaries() async {
     await client.patch(Uri.parse(
-        'http://192.168.15.36:3000/news/summaries/read?news_number=10'));
+        'https://9187-2804-431-cff4-3b30-bd51-a73-eb92-7636.ngrok.io/news/summaries/read?news_number=10'));
   }
 }

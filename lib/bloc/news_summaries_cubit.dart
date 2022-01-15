@@ -5,44 +5,39 @@ import 'package:news_aggregator_flutter/repository/news_summaries_service.dart';
 import 'package:news_aggregator_flutter/repository/news_summary.dart';
 
 const previousNewsBufferNumber = 30;
-const nextNewsBufferNumber = 3;
+const nextNewsBufferNumber = 5;
 
 class NewsSummariesCubit extends Cubit<NewsSummariesState> {
   final newsSummariesService = Modular.get<NewsSummariesService>();
   NewsSummariesCubit() : super(NewsSummariesState());
 
-  Future<void> fetchAll() async {
-    setLoading();
+  Future<void> fetchAll({bool onBackground = false}) async {
+    if (onBackground) {
+      final newState = state.copyWith(isLoadingBackground: true);
+      emit(newState);
+    } else {
+      setLoading();
+    }
+
     try {
       final newsSummaries = await newsSummariesService.getNewsSummaries();
-      setData(newsSummaries);
+      await newsSummariesService.readNewsSummaries();
+      if (onBackground) {
+        final newState = state.copyWith(isLoadingBackground: false);
+        newState.content.addAll(newsSummaries);
+        emit(newState);
+      } else {
+        setData(newsSummaries);
+      }
     } catch (_) {
-      setError();
+      if (!onBackground) setError();
     }
-  }
-
-  Future<void> fetchAllBackground() async {
-    try {} catch (_) {}
   }
 
   Future<void> setIndex(int index) async {
-    print(index);
-    NewsSummariesState newState = state.copyWith(index: index);
-    final numberOfNewsToBeRemoved = index - previousNewsBufferNumber;
-    if (numberOfNewsToBeRemoved > 0) {
-      newState.index -= numberOfNewsToBeRemoved;
-      newState.content = state.content.sublist(numberOfNewsToBeRemoved);
-    }
-
-    if (newState.content.length - newState.index <= nextNewsBufferNumber &&
-        !newState.isLoadingBackground) {
-      newState.isLoadingBackground = true;
-      emit(newState);
-
-      final newsSummaries = await newsSummariesService.getNewsSummaries();
-      newState.content.addAll(newsSummaries);
-      newState.isLoadingBackground = false;
-      emit(newState.copyWith());
+    if (state.content.length - index <= nextNewsBufferNumber &&
+        !state.isLoadingBackground) {
+      await fetchAll(onBackground: true);
     }
   }
 
