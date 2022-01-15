@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:news_aggregator_flutter/repository/news_summary.dart';
+import 'package:news_aggregator_flutter/content_page/repository/news_summary.dart';
 
 class NewsSummariesService {
   final client = http.Client();

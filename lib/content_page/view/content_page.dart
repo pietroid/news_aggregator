@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 class ContentPage extends StatelessWidget {
   const ContentPage(
@@ -19,27 +18,29 @@ class ContentPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: Padding(
-        padding: const EdgeInsets.all(25),
-        child: Column(
-          children: [
-            NewsSource(
-                imageURL: newsSource['icon'] ?? '', name: newsSource['name']),
-            SizedBox(
-              height: 10,
-            ),
-            NewsImage(imageURL: newsImage),
-            SizedBox(
-              height: 20,
-            ),
-            NewsTitle(title: newsTitle, date: newsDate),
-            SizedBox(
-              height: 30,
-            ),
-            NewsBody(newsBody)
-          ],
+    return GestureDetector(
+      child: Container(
+        color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(25),
+          child: Column(
+            children: [
+              NewsSource(
+                  imageURL: newsSource['icon'] ?? '', name: newsSource['name']),
+              SizedBox(
+                height: 10,
+              ),
+              NewsImage(imageURL: newsImage),
+              SizedBox(
+                height: 20,
+              ),
+              NewsTitle(title: newsTitle, date: newsDate),
+              SizedBox(
+                height: 30,
+              ),
+              NewsBody(newsBody)
+            ],
+          ),
         ),
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:news_aggregator_flutter/repository/news_source.dart';
+
+import 'news_source.dart';
 part 'news_summary.g.dart';
 
 @JsonSerializable()

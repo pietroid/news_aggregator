@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:news_aggregator_flutter/repository/news_summaries_service.dart';
-import 'package:news_aggregator_flutter/repository/news_summary.dart';
+import 'package:news_aggregator_flutter/content_page/repository/news_summary.dart';
+
+import 'repository/news_summaries_service.dart';
 
 const previousNewsBufferNumber = 30;
 const nextNewsBufferNumber = 5;
